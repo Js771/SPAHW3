@@ -1,0 +1,228 @@
+<!-- CSS tutorial: https://www.youtube.com/watch?v=yfoY53QXEnI&t=309s 
+    reviewed to learn more about how to develop with CSS.  
+    Some of the general page format (not the tic tac toe board) developed using learnings from this tutorial.-->
+<!DOCTYPE html>
+<head>
+    <title>Tic Tac Toe</title>
+    <style>
+        body{
+            background-color:#f4f4f4;
+            color:#555555;
+            font-family:Arial, Helvetica, sans-serif;
+            font-size:16px;
+            line-height: 1.6eml;
+            margin:0;
+        }
+        .container{
+            width:80%;
+            margin:auto;
+            overflow:hidden;
+        }
+        #main-header{
+            background-color:rgb(49, 49, 49);
+            height: 80px;
+            color:#ffffff;
+        }
+        #main{
+            float:left;
+            width:70%;
+            padding:0 30px;
+            box-sizing: border-box;
+        }
+        .button-centering{
+           text-align:left;
+        }
+        #board{
+            /* Reference: W3 Schools Grid Elements: https://www.w3schools.com/css/tryit.asp?filename=trycss_grid */
+            display: grid;
+            grid-template-columns: auto auto auto;
+        }
+        #restartButton{
+            margin-top:10px;
+            padding: 20px;
+            background-color:#e6e4e4; 
+            font-size:20px;   
+        }
+        .boardButton{
+            margin:1px;
+            padding: 10px;
+            min-width:175px;
+            min-height:175px;
+            background-color:#0066ff; 
+            font-size:50px;
+            display:inline-block;
+        }
+    </style>
+</head>
+<body>
+    <header id="main-header">
+        <div class="container">
+            <h1>Tic Tac Toe</h1>
+        </div>
+    </header>  
+    <div class="container">
+        <section id="main">
+            </br>
+            <script>
+                // Default start with "O"
+                var player = "O";
+
+                // Each block on the board is assigned a unique id between 1 and 9
+                // When an X or O is played, the respective block id is added to
+                // boardFill array which used to track whether the board is full.
+                // When boardFill array is full, length of the array is 9 satisfying the
+                // boardFilledCondition.
+                const boardFilledCondition = 9;
+                var boardFill = [];
+
+                // Board id patterns which represent horizontal, vertical, or diagonal win conditions
+                const winCondition = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
+
+                // When an X or 0 is played, the respective block id is added to 
+                // associated array to track blocks played.
+                var xPlayed = [];
+                var oPlayed = [];
+                                             
+                // Indicate whose turn it is
+                document.write("<h1 id='play'>Who's Turn: " + player + "</h1></br>")
+
+                document.write("<div id='board'>")
+    
+                // Create board with a set of buttons
+                for (let i = 1; i <= 9; i++){
+                    document.write("<button class ='boardButton', id = " + i + ">&nbsp</button>");
+                }
+                
+                // Get all buttons on the board
+                const boardButtonList = document.querySelectorAll('.boardButton');
+                
+                // Add click listener to board buttons
+                for(let i = 0; i < boardButtonList.length; i++)
+                {                       
+                    boardButtonList[i].onclick=function(){
+                                                 
+                        // Add board id to array to track whether element has been played
+                        // Array push from: https://www.w3schools.com/js/js_array_methods.asp
+                        if(!boardFill.includes(this.id)){
+                            boardFill.push(this.id);
+                        }
+
+                        // On click place X or O on board depending on whose play it is
+                        this.innerHTML=player;
+                       
+                        // Update arrays tracking where X's or O's have been played
+                        if(player == "O")
+                        {
+                            oPlayed.push(parseInt(this.id));
+                        }
+                        else if(player == "X")
+                        {
+                            xPlayed.push(parseInt(this.id));
+                        }
+                        
+                        checkForWin();
+
+                        if(boardFill.length != 9)
+                        {
+                            // Toggle to next player
+                            togglePlayer();
+
+                            // Update indication of whose turn it is
+                            document.getElementById('play').innerHTML= "Who's Turn: " + player;
+                        }
+                    };
+                } // End add click listener to board buttons
+
+                // Toggle to next player
+                function togglePlayer(){
+                    if(player == "O")
+                        {
+                            player = "X";
+                        } 
+                        else if(player == "X")
+                        {
+                            player = "O";
+                        }
+                } // End togglePlayer
+
+                function checkForWin(){
+                    var winCounter = 0;
+                    for(let i = 0; i < winCondition.length; i++){
+                        //console.log(winCondition[i]); 
+                        
+                        
+                        for(let j = 0; j < winCondition[i].length; j++)
+                        {                            
+                            // console.log(winCondition[i][j]);
+                            console.log(xPlayed);
+                            if(xPlayed.includes(winCondition[i][j])){
+                                winCounter += 1;
+                                console.log("wincounter");
+                                console.log(winCounter);
+                                console.log("end wincounter");
+                                if(winCounter == 3)
+                                {                                    
+                                    announceWin();
+                                };
+                            } 
+                        }
+                        winCounter = 0;
+                    }
+
+                    // Check if board is full
+                    if(boardFill.length == 9)
+                    {
+                        document.getElementById('play').innerHTML= "DRAW!";
+                    }
+                }
+
+                function announceWin(){
+                    document.getElementById('play').innerHTML = "Player " + player + " WINs!";
+                }
+
+                function clearBoard(){
+                    // Update indication of whose turn it is
+                    document.getElementById('play').innerHTML= "Who's Turn: " + player;
+
+                    // Reset win counter
+                    winCounter = 0;
+
+                    // Clear X's and O's on the board 
+                    for(let i = 0; i < boardButtonList.length; i++){   
+                        boardButtonList[i].innerHTML="";
+                    }
+
+                    // Clear array tracking whether the board is full
+                    // Reference W3 Schools array pop method:https://www.w3schools.com/js/js_array_methods.asp
+                    while(boardFill.length > 0){
+                        boardFill.pop();
+                    }
+                    
+                    // Clear array tracking where X has been played
+                    while(xPlayed.length > 0){
+                        xPlayed.pop();
+                    }
+
+                    // Clear array tracking where Y has been played
+                    while(oPlayed.length > 0){
+                        oPlayed.pop();
+                    }
+                } // end clear board
+
+            </script>
+            <div class="button-centering">
+                <input id="restartButton" type="submit" value="Restart" name=""> 
+            </div>   
+            <script>
+                window.onload=function()
+                {
+                    // When restart button is clicked, clear board
+                    document.getElementById('restartButton').onclick=function(){
+                        clearBoard();
+                    };                   
+                }
+            </script>
+        </section>
+    </div>
+</body>
+</html>
