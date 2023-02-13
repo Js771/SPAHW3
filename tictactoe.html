@@ -64,24 +64,31 @@
         <section id="main">
             </br>
             <script>
-                // Default start with "O"
+                // Default start with player "O"
                 var player = "O";
 
-                // Each block on the board is assigned a unique id between 1 and 9
+                // Each block on the board is assigned a unique id between 1 and 9.
                 // When an X or O is played, the respective block id is added to
-                // boardFill array which used to track whether the board is full.
-                // When boardFill array is full, length of the array is 9 satisfying the
-                // boardFilledCondition.
+                // boardFill array.  BoardFill array is used to track whether the board is full.
+                // When boardFill array is full, length of boardFill array is 9, equal to 
+                // the number of blocks on the board, satisfying the boardFilledCondition.
                 const boardFilledCondition = 9;
                 var boardFill = [];
 
-                // Board id patterns which represent horizontal, vertical, or diagonal win conditions
+                // Array winCondition identifies the board id patterns which represent horizontal,
+                // vertical, or diagonal win conditions.
+                // Id 1 is the upper most left block.  Id 9 is the lower most right block.
+                // Block Id's on the board are numbered left to right. 
                 const winCondition = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
 
                 // When an X or 0 is played, the respective block id is added to 
                 // associated array to track blocks played.
                 var xPlayed = [];
                 var oPlayed = [];
+              
+                // Variables used to track X or O wins
+                xWinCounter = 0;
+                oWinCounter = 0;
                                              
                 // Indicate whose turn it is
                 document.write("<h1 id='play'>Who's Turn: " + player + "</h1></br>")
@@ -113,6 +120,7 @@
                         // Update arrays tracking where X's or O's have been played
                         if(player == "O")
                         {
+                            // this.id is a string, thus need to parse to int 
                             oPlayed.push(parseInt(this.id));
                         }
                         else if(player == "X")
@@ -120,8 +128,6 @@
                             xPlayed.push(parseInt(this.id));
                         }
                         
-                        checkForWin();
-
                         if(boardFill.length != 9)
                         {
                             // Toggle to next player
@@ -130,6 +136,8 @@
                             // Update indication of whose turn it is
                             document.getElementById('play').innerHTML= "Who's Turn: " + player;
                         }
+
+                        checkForWin();
                     };
                 } // End add click listener to board buttons
 
@@ -146,27 +154,40 @@
                 } // End togglePlayer
 
                 function checkForWin(){
-                    var winCounter = 0;
+
+                    // Reset X and O win counters to 0
+                    xWinCounter = 0;
+                    oWinCounter = 0;
+
+                    // Check X and O played values for a win condition
                     for(let i = 0; i < winCondition.length; i++){
-                        //console.log(winCondition[i]); 
-                        
-                        
                         for(let j = 0; j < winCondition[i].length; j++)
-                        {                            
-                            // console.log(winCondition[i][j]);
-                            console.log(xPlayed);
-                            if(xPlayed.includes(winCondition[i][j])){
-                                winCounter += 1;
-                                console.log("wincounter");
-                                console.log(winCounter);
-                                console.log("end wincounter");
-                                if(winCounter == 3)
-                                {                                    
-                                    announceWin();
-                                };
-                            } 
+                        {
+                            if(xPlayed.includes(winCondition[i][j]))
+                            {
+                                xWinCounter += 1;
+
+                                // If a win condition is satisfied, X wins
+                                if (xWinCounter == winCondition[i].length)
+                                {
+                                    document.getElementById('play').innerHTML = "X WINS!";
+                                }
+                            }
+                            else if(oPlayed.includes(winCondition[i][j]))
+                            {
+                                oWinCounter += 1;
+
+                                // If a win condition is satisfied, O wins
+                                if (oWinCounter == winCondition[i].length)
+                                {
+                                    document.getElementById('play').innerHTML = "O WINS!";
+                                }
+                            }
                         }
-                        winCounter = 0;
+
+                        // Reset X and O win counters to 0
+                        xWinCounter = 0;
+                        oWinCounter = 0;
                     }
 
                     // Check if board is full
@@ -174,18 +195,19 @@
                     {
                         document.getElementById('play').innerHTML= "DRAW!";
                     }
+
                 }
 
                 function announceWin(){
-                    document.getElementById('play').innerHTML = "Player " + player + " WINs!";
+                    document.getElementById('play').innerHTML = " WIN!";
                 }
 
                 function clearBoard(){
                     // Update indication of whose turn it is
                     document.getElementById('play').innerHTML= "Who's Turn: " + player;
 
-                    // Reset win counter
-                    winCounter = 0;
+                    oWinCounter = 0;
+                    xWinCounter = 0;
 
                     // Clear X's and O's on the board 
                     for(let i = 0; i < boardButtonList.length; i++){   
