@@ -8,15 +8,15 @@
         body{
             background-color:#f4f4f4;
             color:#555555;
-            font-family:Arial, Helvetica, sans-serif;
-            font-size:16px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
             line-height: 1.6eml;
-            margin:0;
+            margin: 0;
         }
         .container{
-            width:80%;
-            margin:auto;
-            overflow:hidden;
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
         }
         #main-header{
             background-color:rgb(49, 49, 49);
@@ -24,13 +24,13 @@
             color:#ffffff;
         }
         #main{
-            float:left;
-            width:70%;
-            padding:0 30px;
+            float: left;
+            width: 70%;
+            padding: 0 30px;
             box-sizing: border-box;
         }
         .button-centering{
-           text-align:left;
+           text-align: left;
         }
         #board{
             /* Reference: W3 Schools Grid Elements: https://www.w3schools.com/css/tryit.asp?filename=trycss_grid */
@@ -38,19 +38,19 @@
             grid-template-columns: auto auto auto;
         }
         #restartButton{
-            margin-top:10px;
+            margin-top: 10px;
             padding: 20px;
             background-color:#e6e4e4; 
-            font-size:20px;   
+            font-size: 20px;   
         }
         .boardButton{
-            margin:1px;
+            margin: 1px;
             padding: 10px;
-            min-width:175px;
-            min-height:175px;
+            min-width: 175px;
+            min-height: 175px;
             background-color:#0066ff; 
-            font-size:50px;
-            display:inline-block;
+            font-size: 50px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -90,7 +90,7 @@
                 xWinCounter = 0;
                 oWinCounter = 0;
                                              
-                // Indicate whose turn it is
+                // Header indicates whose turn it is
                 document.write("<h1 id='play'>Who's Turn: " + player + "</h1></br>")
 
                 document.write("<div id='board'>")
@@ -120,11 +120,12 @@
                         // Update arrays tracking where X's or O's have been played
                         if(player == "O")
                         {
-                            // this.id is a string, thus need to parse to int 
+                            // This.id is a string, thus need to parse to int 
                             oPlayed.push(parseInt(this.id));
                         }
                         else if(player == "X")
                         {
+                            // This.id is a string, thus need to parse to int
                             xPlayed.push(parseInt(this.id));
                         }
                         
@@ -163,6 +164,7 @@
                     for(let i = 0; i < winCondition.length; i++){
                         for(let j = 0; j < winCondition[i].length; j++)
                         {
+                            // Array includes from: https://www.w3schools.com/jsref/jsref_includes_array.asp
                             if(xPlayed.includes(winCondition[i][j]))
                             {
                                 xWinCounter += 1;
@@ -198,14 +200,11 @@
 
                 }
 
-                function announceWin(){
-                    document.getElementById('play').innerHTML = " WIN!";
-                }
-
                 function clearBoard(){
                     // Update indication of whose turn it is
                     document.getElementById('play').innerHTML= "Who's Turn: " + player;
 
+                    // Reset win counters
                     oWinCounter = 0;
                     xWinCounter = 0;
 
@@ -215,7 +214,7 @@
                     }
 
                     // Clear array tracking whether the board is full
-                    // Reference W3 Schools array pop method:https://www.w3schools.com/js/js_array_methods.asp
+                    // Referenced W3 Schools array pop method:https://www.w3schools.com/js/js_array_methods.asp
                     while(boardFill.length > 0){
                         boardFill.pop();
                     }
