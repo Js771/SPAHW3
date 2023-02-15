@@ -101,7 +101,7 @@
                 }
                 
                 // Get all buttons on the board
-                const boardButtonList = document.querySelectorAll('.boardButton');
+                var boardButtonList = document.querySelectorAll('.boardButton');
                 
                 // Add click listener to board buttons
                 for(let i = 0; i < boardButtonList.length; i++)
@@ -125,7 +125,6 @@
                         }
                         else if(player == "X")
                         {
-                            // This.id is a string, thus need to parse to int
                             xPlayed.push(parseInt(this.id));
                         }
                         
@@ -173,6 +172,7 @@
                                 if (xWinCounter == winCondition[i].length)
                                 {
                                     document.getElementById('play').innerHTML = "X WINS!";
+                                    toggleButtonState(true);
                                 }
                             }
                             else if(oPlayed.includes(winCondition[i][j]))
@@ -183,6 +183,7 @@
                                 if (oWinCounter == winCondition[i].length)
                                 {
                                     document.getElementById('play').innerHTML = "O WINS!";
+                                    toggleButtonState(true);
                                 }
                             }
                         }
@@ -196,11 +197,16 @@
                     if(boardFill.length == 9)
                     {
                         document.getElementById('play').innerHTML= "DRAW!";
+                        toggleButtonState(true);
                     }
 
                 }
 
                 function clearBoard(){
+                    
+                    // Activate board buttons
+                    toggleButtonState(false);
+
                     // Update indication of whose turn it is
                     document.getElementById('play').innerHTML= "Who's Turn: " + player;
 
@@ -229,6 +235,12 @@
                         oPlayed.pop();
                     }
                 } // end clear board
+
+                // Activate/Deactivate buttons on the board
+                function toggleButtonState(state){
+                    // Referenced W3 School button disabling: https://www.w3schools.com/jsref/prop_pushbutton_disabled.asp
+                    boardButtonList.forEach((boardButton) =>{boardButton.disabled = state});
+                }
 
             </script>
             <div class="button-centering">
