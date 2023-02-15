@@ -141,6 +141,7 @@
                     };
                 } // End add click listener to board buttons
 
+                
                 // Toggle to next player
                 function togglePlayer(){
                     if(player == "O")
@@ -153,8 +154,8 @@
                         }
                 } // End togglePlayer
 
+                
                 function checkForWin(){
-
                     // Reset X and O win counters to 0
                     xWinCounter = 0;
                     oWinCounter = 0;
@@ -199,9 +200,9 @@
                         document.getElementById('play').innerHTML= "DRAW!";
                         toggleButtonState(true);
                     }
-
                 }
 
+                
                 function clearBoard(){
                     
                     // Activate board buttons
@@ -236,6 +237,7 @@
                     }
                 } // end clear board
 
+                
                 // Activate/Deactivate buttons on the board
                 function toggleButtonState(state){
                     // Referenced W3 School button disabling: https://www.w3schools.com/jsref/prop_pushbutton_disabled.asp
